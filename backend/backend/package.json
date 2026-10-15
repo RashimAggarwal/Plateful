@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "food-ordering-api": "file:.."
+  }
+}

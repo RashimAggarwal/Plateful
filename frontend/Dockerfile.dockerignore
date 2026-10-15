@@ -1,0 +1,10 @@
+.git
+**/.env*
+**/node_modules
+**/dist
+**/coverage
+**/work-build
+**/.npm-cache
+**/npm-debug.log*
+backend
+work

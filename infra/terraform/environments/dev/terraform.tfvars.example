@@ -1,0 +1,21 @@
+aws_region       = "us-east-1"
+project_name     = "plateful"
+environment      = "dev"
+
+# Current EKS supported release as of October 2026; verify availability in your region before planning.
+kubernetes_version = "1.37"
+
+# Replace with an IAM role ARN you control. Do not use an AWS access key or secret here.
+cluster_admin_role_arn = "arn:aws:iam::123456789012:role/replace-with-your-admin-role"
+
+# Replace this TEST-NET address with your current public IPv4 address followed by /32.
+# Example PowerShell: (Invoke-RestMethod https://checkip.amazonaws.com).Trim() + "/32"
+cluster_endpoint_public_access_cidrs = ["203.0.113.10/32"]
+
+# Set true only after reviewing NAT Gateway hourly and data-processing charges.
+enable_nat_gateway = true
+
+node_instance_types = ["t3.medium"]
+node_min_size       = 1
+node_desired_size   = 2
+node_max_size       = 3
