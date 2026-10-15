@@ -104,9 +104,9 @@ pipeline {
             '''
           } else {
             bat '''
-              docker build --pull -f backend\Dockerfile -t "%BACKEND_IMAGE%" backend
+              docker build --pull -f backend/Dockerfile -t "%BACKEND_IMAGE%" backend
               if errorlevel 1 exit /b %errorlevel%
-              docker build --pull -f frontend\Dockerfile -t "%FRONTEND_IMAGE%" .
+              docker build --pull -f frontend/Dockerfile -t "%FRONTEND_IMAGE%" .
             '''
           }
         }
