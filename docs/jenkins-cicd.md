@@ -2,6 +2,10 @@
 
 The root `Jenkinsfile` checks out this repository, installs from the committed npm lockfiles, runs backend tests and any frontend test script that exists, and builds the frontend. Docker image builds, ECR publishing, and EKS deployment are controlled by parameters. Their defaults are off so a local CI run needs no AWS. The image tag is the Jenkins build number plus the checked-out commit ID. When AWS deployment is enabled on `main`, the pipeline asks for approval before changing EKS Deployments.
 
+The pipeline polls its configured Git branch every two minutes (`pollSCM`). Make and save code changes, then commit and push them to GitHub; Jenkins will detect the new remote commit and create the next numbered build (for example, `#2`). Uncommitted local edits are not visible to the GitHub-backed Jenkins job. For a Jenkins controller on `localhost`, polling avoids the need for a GitHub webhook to reach the local machine.
+
+On a Windows agent, `OPEN_BUILD_IN_BROWSER` defaults to `true`; the pipeline opens that run's Jenkins build page after checkout, showing its build number and live stages. Jenkins must be running in the logged-in desktop session for the browser window to appear there; a Windows service or Linux agent cannot open the user's desktop browser. Set `OPEN_BUILD_IN_BROWSER=false` to disable it. For a Linux/cloud agent, open the build from the Jenkins job page.
+
 ## What the repository already provides
 
 - The root npm scripts call the frontend and backend. The pipeline runs `npm ci` in `backend/` and `frontend/`, which have their own lockfiles.

@@ -19,8 +19,14 @@ pipeline {
     skipDefaultCheckout(true)
   }
 
+  triggers {
+    // Check the configured GitHub branch regularly; local edits must be committed and pushed.
+    pollSCM('H/2 * * * *')
+  }
+
   parameters {
     string(name: 'JENKINS_AGENT_LABEL', defaultValue: 'built-in', description: 'Use built-in for local Jenkins today; set the Linux AWS agent label when deploying to AWS.')
+    booleanParam(name: 'OPEN_BUILD_IN_BROWSER', defaultValue: true, description: 'Open this build page in the default browser when running on a Windows Jenkins agent.')
     booleanParam(name: 'BUILD_DOCKER_IMAGES', defaultValue: false, description: 'Build Docker images. Requires Docker Desktop/daemon to be running.')
     booleanParam(name: 'DEPLOY_TO_AWS', defaultValue: false, description: 'Opt in to ECR push and approved EKS deployment. Leave off for local-only CI.')
     string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS region containing ECR and EKS.')
@@ -56,6 +62,13 @@ pipeline {
           env.FRONTEND_IMAGE = "plateful/frontend:${env.IMAGE_TAG}"
           echo "Building immutable image tag ${env.IMAGE_TAG}"
         }
+      }
+    }
+
+    stage('Open Jenkins build page') {
+      when { expression { !isUnix() && params.OPEN_BUILD_IN_BROWSER } }
+      steps {
+        bat 'start "" "%BUILD_URL%"'
       }
     }
 
